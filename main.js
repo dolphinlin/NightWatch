@@ -202,7 +202,7 @@ function makeMaker(map, path, map_icon_label, { lat, lng } = position, data, mar
               <div class="info-name">${data.val().name}</div>
                 <div class="info-phone">${data.val().phone}</div>
             </div>
-            <div class="info-phone-btn" onclick="callSOS('${data.key}')">
+            <div class="info-phone-btn" onclick="alert('call...')">
                 <image src="./phone.svg" width="30" height="30"/>
             </div>
         </div>
