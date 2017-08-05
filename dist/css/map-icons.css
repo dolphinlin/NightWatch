@@ -33,6 +33,18 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.map-icon-label .map-icon.map-sos {
+	animation-name: sos;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-duration: 0.1s;
+}
+
+@keyframes sos {
+    from {color: red;}
+    to {color: white;}
+}
+
 .map-icon-abseiling:before {
 	content: "\e800";
 }

@@ -17,6 +17,7 @@ let data = {
     photo: null,
     gender: null,
     phone: null,
+    sos: false,
     loc: {
         lat: null,
         lng: null
@@ -80,7 +81,7 @@ function initMap() {
         data.mail = 'hisb50918@gmail.com'
         data.photo = 'QQQQ'
         data.phone = '0977777777'
-        addToFirebase2(data);
+        addToFirebase(data);
     });
 
     var features = [], dangers = [];
@@ -92,8 +93,6 @@ function initMap() {
             dangerPin(map, dangers, p)
         })
     })
-    // dangerPin(map, dangers, )
-    // initAuthentication(initFirebase.bind(undefined, heatmap));
 }
 
 function testMap(map) {
@@ -101,19 +100,12 @@ function testMap(map) {
 
     let markers = new Map()
     locRef.on('child_added', function (data) {
-        console.log(data.key)
-        var marker = new mapIcons.Marker({
-            position: new google.maps.LatLng(data.val().loc.lat, data.val().loc.lng),
-            icon: {
-                path: mapIcons.shapes.SQUARE_PIN,
-                fillColor: '#00CCBB',
-                fillOpacity: 1,
-                strokeColor: '',
-                strokeWeight: 0
-            },
-            map_icon_label: `<span class="map-icon ${data.val().gender ? 'map-icon-male' : 'map-icon-female'}"></span>`,
-            map
-        });
+        if (!data.val().loc) return
+        let map_icon_label = `<span class="map-icon ${data.val().gender ? 'map-icon-male' : 'map-icon-female'} ${data.val().sos ? 'map-sos' : ''}"></span>`
+        let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
+            lat: data.val().loc.lat,
+            lng: data.val().loc.lng
+        })
         var contentString = `
         <div>
             <p><strong>Name:</strong> ${data.val().name}</p>
@@ -126,19 +118,16 @@ function testMap(map) {
             content: contentString
         });
         marker.addListener('click', function () {
-            infowindow.open(map, marker);
+            // infowindow.open(map, marker);
+            console.log(data.val())
             locRef.child(data.key).update({
-                loc: {
-                    lat: data.val().loc.lat + 0.001,
-                    lng: data.val().loc.lng + 0.001
-                }
+                sos: !data.val().sos
             }).then(res => {
-                console.log('update success')
+                console.log('update success', res)
             })
-            console.log(this)
         });
 
-        marker.addListener('dblclick', function () {
+        marker.addListener('rightclick', function () {
             locRef.child(data.key).remove()
         });
 
@@ -148,19 +137,11 @@ function testMap(map) {
     locRef.on('child_changed', function (data) {
         let m = markers.get(data.key)
         m.setMap(null)
-        // m.map_icon_label = '<span class="map-icon map-icon-grocery-or-supermarket"></span>'
-        var marker = new mapIcons.Marker({
-            position: new google.maps.LatLng(data.val().loc.lat, data.val().loc.lng),
-            icon: {
-                path: mapIcons.shapes.SQUARE_PIN,
-                fillColor: '#FFCCBB',
-                fillOpacity: 1,
-                strokeColor: '',
-                strokeWeight: 0
-            },
-            map_icon_label: `<span class="map-icon ${data.val().gender ? 'map-icon-male' : 'map-icon-female'}"></span>`,
-            map
-        });
+        let map_icon_label = `<span class="map-icon ${data.val().gender ? 'map-icon-male' : 'map-icon-female'} ${data.val().sos ? 'map-sos' : ''}"></span>`
+        let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
+            lat: data.val().loc.lat,
+            lng: data.val().loc.lng
+        })
         markers.set(data.key, marker)
         // m.setPosition(new google.maps.LatLng(data.val().loc.lat, data.val().loc.lng))
     });
@@ -173,15 +154,31 @@ function testMap(map) {
     });
 }
 
+function makeMaker (map, path, map_icon_label, { lat, lng } = position) {
+    return new mapIcons.Marker({
+            position: new google.maps.LatLng(lat, lng),
+            icon: {
+                path,
+                fillColor: '#FFCCBB',
+                fillOpacity: 1,
+                strokeColor: '',
+                strokeWeight: 0
+            },
+            map_icon_label,
+            map
+        })
+}
+
 // userID/userName/userPhone/userPhoto/UserSex/userLocation{log/lat}
 
-function addToFirebase2({ name, gender, photo, loc, phone } = data) {
+function addToFirebase({ name, gender, photo, loc, phone, sos } = data) {
     firebase.database().ref('location/').push({
         name,
         gender,
         photo,
         loc,
-        phone
+        phone,
+        sos
     }).then(res => {
         console.log('push success')
     }, console.error)
@@ -229,53 +226,6 @@ function makeInfoBox(controlDiv, map) {
     controlText.style.padding = '6px'
     controlText.innerText = 'The map shows all clicks made in the last 10 minutes.'
     controlUI.appendChild(controlText)
-}
-
-/**
- * Set up a Firebase with deletion on clicks older than expirySeconds
- * @param {!google.maps.visualization.HeatmapLayer} heatmap The heatmap to
- * which points are added from Firebase.
- */
-function initFirebase(heatmap) {
-
-    // Reference to the clicks in Firebase.
-    var loc = firebase.database().ref('location/');
-
-    // Listener for when a click is added.
-    loc.on('child_added', function (snapshot) {
-
-
-
-        // Get that click from firebase.
-        var newPosition = snapshot.val();
-
-        console.log(`get new location ${newPosition}`)
-        var point = new google.maps.LatLng(newPosition.lat, newPosition.lng);
-        var elapsed = new Date().getTime() - newPosition.timestamp;
-
-        // Add the point to  the heatmap.
-        heatmap.getData().push(point);
-
-        // Requests entries older than expiry time (10 minutes).
-        var expirySeconds = Math.max(60 * 10 * 1000 - elapsed, 0);
-        // Set client timeout to remove the point after a certain time.
-        window.setTimeout(function () {
-            // Delete the old point from the database.
-            snapshot.ref().remove();
-        }, expirySeconds);
-    }
-    );
-
-    // Remove old data from the heatmap when a point is removed from firebase.
-    loc.on('child_removed', function (snapshot, prevChildKey) {
-        var heatmapData = heatmap.getData();
-        var i = 0;
-        while (snapshot.val().lat != heatmapData.getAt(i).lat()
-            || snapshot.val().lng != heatmapData.getAt(i).lng()) {
-            i++;
-        }
-        heatmapData.removeAt(i);
-    });
 }
 
 // google map key: AIzaSyDqIKzgQx_yMB-fvxh4-_2YNRrXVDRUlyY
