@@ -11,12 +11,14 @@
 
 .map-icon-label .map-icon {
 	display: block;
-	font-size: 24px;
-	color: #FFFFFF;
+	font-size: 30px;
+	color: darkblue;
 	width: 48px;
 	line-height: 48px;
 	text-align: center;
 	white-space: nowrap;
+	stroke: white;
+	stroke-width: 5px;
 }
 
 .map-icon {

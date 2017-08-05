@@ -79,7 +79,7 @@ function initMap() {
         data.name = 'Dolphin'
         data.gender = 1
         data.mail = 'hisb50918@gmail.com'
-        data.photo = 'QQQQ'
+        data.photo = './logo.png'
         data.phone = '0977777777'
         addToFirebase(data);
     });
@@ -105,34 +105,7 @@ function testMap(map) {
         let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
             lat: data.val().loc.lat,
             lng: data.val().loc.lng
-        })
-        var contentString = `
-        <div>
-            <p><strong>Name:</strong> ${data.val().name}</p>
-            <p><strong>Phone:</strong> ${data.val().phone}</p>
-            <p><strong>Gender:</strong> ${data.val().gender ? '男' : '女'}</p>
-        </div>
-        `
-
-        var infowindow = new google.maps.InfoWindow({
-            content: contentString
-        });
-        marker.addListener('click', function () {
-            infowindow.open(map, marker);
-        });
-
-        marker.addListener('dblclick', function () {
-            locRef.child(data.key).update({
-                sos: !data.val().sos
-            }).then(res => {
-                console.log('update success', res)
-            })
-        });
-
-
-        marker.addListener('rightclick', function () {
-            locRef.child(data.key).remove()
-        });
+        }, data, markers)
 
         markers.set(data.key, marker)
     });
@@ -144,7 +117,7 @@ function testMap(map) {
         let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
             lat: data.val().loc.lat,
             lng: data.val().loc.lng
-        })
+        }, data, markers)
         markers.set(data.key, marker)
         // m.setPosition(new google.maps.LatLng(data.val().loc.lat, data.val().loc.lng))
     });
@@ -157,19 +130,56 @@ function testMap(map) {
     });
 }
 
-function makeMaker(map, path, map_icon_label, { lat, lng } = position) {
-    return new mapIcons.Marker({
+function makeMaker(map, path, map_icon_label, { lat, lng } = position, data, markers) {
+    var locRef = firebase.database().ref('location/');
+    
+    let marker = new mapIcons.Marker({
         position: new google.maps.LatLng(lat, lng),
         icon: {
             path,
             fillColor: '#FFCCBB',
-            fillOpacity: 1,
+            fillOpacity: 0,
             strokeColor: '',
             strokeWeight: 0
         },
         map_icon_label,
         map
     })
+
+    var contentString = `
+        <div class="info">
+            <div class="info-photo" style="background-image: url(${data.val().photo})">
+            </div>
+            <div class="info-name-phone">
+              <div class="info-name">${data.val().name}</div>
+                <div class="info-phone">${data.val().phone}</div>
+            </div>
+            <div class="info-phone-btn" onclick="alert('call phone')">
+                <image src="./phone.svg" width="30" height="30"/>
+            </div>
+        </div>
+        `
+
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
+    marker.addListener('click', function () {
+        infowindow.open(map, marker);
+    });
+
+    marker.addListener('dblclick', function () {
+        locRef.child(data.key).update({
+            sos: !data.val().sos
+        }).then(res => {
+            console.log('update success', res)
+        })
+    });
+
+    marker.addListener('rightclick', function () {
+        locRef.child(data.key).remove()
+    });
+
+    return marker
 }
 
 // userID/userName/userPhone/userPhoto/UserSex/userLocation{log/lat}
