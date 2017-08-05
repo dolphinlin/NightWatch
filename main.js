@@ -118,14 +118,17 @@ function testMap(map) {
             content: contentString
         });
         marker.addListener('click', function () {
-            // infowindow.open(map, marker);
-            console.log(data.val())
+            infowindow.open(map, marker);
+        });
+
+        marker.addListener('dblclick', function () {
             locRef.child(data.key).update({
                 sos: !data.val().sos
             }).then(res => {
                 console.log('update success', res)
             })
         });
+
 
         marker.addListener('rightclick', function () {
             locRef.child(data.key).remove()
@@ -154,19 +157,19 @@ function testMap(map) {
     });
 }
 
-function makeMaker (map, path, map_icon_label, { lat, lng } = position) {
+function makeMaker(map, path, map_icon_label, { lat, lng } = position) {
     return new mapIcons.Marker({
-            position: new google.maps.LatLng(lat, lng),
-            icon: {
-                path,
-                fillColor: '#FFCCBB',
-                fillOpacity: 1,
-                strokeColor: '',
-                strokeWeight: 0
-            },
-            map_icon_label,
-            map
-        })
+        position: new google.maps.LatLng(lat, lng),
+        icon: {
+            path,
+            fillColor: '#FFCCBB',
+            fillOpacity: 1,
+            strokeColor: '',
+            strokeWeight: 0
+        },
+        map_icon_label,
+        map
+    })
 }
 
 // userID/userName/userPhone/userPhoto/UserSex/userLocation{log/lat}
@@ -224,7 +227,7 @@ function makeInfoBox(controlDiv, map) {
     controlText.style.fontFamily = 'Roboto,Arial,sans-serif'
     controlText.style.fontSize = '100%'
     controlText.style.padding = '6px'
-    controlText.innerText = 'The map shows all clicks made in the last 10 minutes.'
+    controlText.innerText = 'NightWatch WEB Monit'
     controlUI.appendChild(controlText)
 }
 
