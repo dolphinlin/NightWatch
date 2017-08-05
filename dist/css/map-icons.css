@@ -42,13 +42,17 @@
 	animation-direction: alternate;
 	animation-duration: 0.1s;
 }
-svg path {
-	fill: #000 !important;
+.svg-sos {
+	fill: red;
+	animation-name: sos;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-duration: 0.1s;
 }
 
 @keyframes sos {
-    from {color: red;}
-    to {color: white;}
+    from {fill: red;}
+    to {fill: white;}
 }
 
 .map-icon-abseiling:before {

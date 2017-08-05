@@ -101,7 +101,31 @@ function testMap(map) {
     let markers = new Map()
     locRef.on('child_added', function (data) {
         if (!data.val().loc) return
-        let map_icon_label = `<image src="./${data.val().gender ? 'Boy' : 'Girl'}.svg" class="svg ${data.val().sos ? 'map-sos' : ''}"/>`
+        let map_icon_label = `
+<svg width="40px" height="63px" viewBox="0 0 40 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter x="-100.0%" y="-34.9%" width="294.4%" height="179.1%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-912.000000, -448.000000)">
+            <g id="Page-1" filter="url(#filter-1)" transform="translate(923.000000, 456.000000)">
+                <path d="M8.7174,0.9994 C11.3234,0.9994 13.4454,3.1204 13.4454,5.7274 C13.4454,8.3334 11.3234,10.4544 8.7174,10.4544 C6.1114,10.4544 3.9904,8.3344 3.9904,5.7274 C3.9904,3.1204 6.1114,0.9994 8.7174,0.9994" id="Fill-1" class="${data.val().sos ? 'svg-sos' : ''}" fill="${data.val().gender ? '#1B1464':'#9E005D'}"></path>
+                <path d="M8.7174,0.9994 C11.3234,0.9994 13.4454,3.1204 13.4454,5.7274 C13.4454,8.3334 11.3234,10.4544 8.7174,10.4544 C6.1114,10.4544 3.9904,8.3344 3.9904,5.7274 C3.9904,3.1204 6.1114,0.9994 8.7174,0.9994 Z" id="Stroke-3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M13.5816,11.164 L3.8536,11.164 C1.7286,11.164 -0.0004,12.893 -0.0004,15.017 L-0.0004,24.767 C-0.0004,26.55 1.2006,28.062 2.8746,28.497 L2.8746,38.304 C2.8746,40.403 4.5836,42.11 6.6856,42.11 L10.7506,42.11 C12.8526,42.11 14.5606,40.403 14.5606,38.304 L14.5606,28.497 C16.2346,28.062 17.4356,26.55 17.4356,24.767 L17.4356,15.017 C17.4356,12.893 15.7066,11.164 13.5816,11.164" id="Fill-5" class="${data.val().sos ? 'svg-sos' : ''}" fill="${data.val().gender ? '#1B1464':'#9E005D'}"></path>
+                <path d="M13.5816,11.164 L3.8536,11.164 C1.7286,11.164 -0.0004,12.893 -0.0004,15.017 L-0.0004,24.767 C-0.0004,26.55 1.2006,28.062 2.8746,28.497 L2.8746,38.304 C2.8746,40.403 4.5836,42.11 6.6856,42.11 L10.7506,42.11 C12.8526,42.11 14.5606,40.403 14.5606,38.304 L14.5606,28.497 C16.2346,28.062 17.4356,26.55 17.4356,24.767 L17.4356,15.017 C17.4356,12.893 15.7066,11.164 13.5816,11.164 Z" id="Stroke-7" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </g>
+    </g>
+</svg>
+        `
         let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
             lat: data.val().loc.lat,
             lng: data.val().loc.lng
@@ -113,7 +137,31 @@ function testMap(map) {
     locRef.on('child_changed', function (data) {
         let m = markers.get(data.key)
         m.setMap(null)
-        let map_icon_label = `<image src="./${data.val().gender ? 'Boy' : 'Girl'}.svg" class="svg ${data.val().sos ? 'map-sos' : ''}"/>`
+        let map_icon_label = `
+<svg width="40px" height="63px" viewBox="0 0 40 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter x="-100.0%" y="-34.9%" width="294.4%" height="179.1%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-912.000000, -448.000000)">
+            <g id="Page-1" filter="url(#filter-1)" transform="translate(923.000000, 456.000000)">
+                <path d="M8.7174,0.9994 C11.3234,0.9994 13.4454,3.1204 13.4454,5.7274 C13.4454,8.3334 11.3234,10.4544 8.7174,10.4544 C6.1114,10.4544 3.9904,8.3344 3.9904,5.7274 C3.9904,3.1204 6.1114,0.9994 8.7174,0.9994" id="Fill-1" class="${data.val().sos ? 'svg-sos' : ''}" fill="${data.val().gender ? '#1B1464':'#9E005D'}"></path>
+                <path d="M8.7174,0.9994 C11.3234,0.9994 13.4454,3.1204 13.4454,5.7274 C13.4454,8.3334 11.3234,10.4544 8.7174,10.4544 C6.1114,10.4544 3.9904,8.3344 3.9904,5.7274 C3.9904,3.1204 6.1114,0.9994 8.7174,0.9994 Z" id="Stroke-3" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M13.5816,11.164 L3.8536,11.164 C1.7286,11.164 -0.0004,12.893 -0.0004,15.017 L-0.0004,24.767 C-0.0004,26.55 1.2006,28.062 2.8746,28.497 L2.8746,38.304 C2.8746,40.403 4.5836,42.11 6.6856,42.11 L10.7506,42.11 C12.8526,42.11 14.5606,40.403 14.5606,38.304 L14.5606,28.497 C16.2346,28.062 17.4356,26.55 17.4356,24.767 L17.4356,15.017 C17.4356,12.893 15.7066,11.164 13.5816,11.164" id="Fill-5" class="${data.val().sos ? 'svg-sos' : ''}" fill="${data.val().gender ? '#1B1464':'#9E005D'}"></path>
+                <path d="M13.5816,11.164 L3.8536,11.164 C1.7286,11.164 -0.0004,12.893 -0.0004,15.017 L-0.0004,24.767 C-0.0004,26.55 1.2006,28.062 2.8746,28.497 L2.8746,38.304 C2.8746,40.403 4.5836,42.11 6.6856,42.11 L10.7506,42.11 C12.8526,42.11 14.5606,40.403 14.5606,38.304 L14.5606,28.497 C16.2346,28.062 17.4356,26.55 17.4356,24.767 L17.4356,15.017 C17.4356,12.893 15.7066,11.164 13.5816,11.164 Z" id="Stroke-7" stroke="#FFFFFF" stroke-width="2"></path>
+            </g>
+        </g>
+    </g>
+</svg>
+        `
         let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
             lat: data.val().loc.lat,
             lng: data.val().loc.lng
@@ -178,42 +226,6 @@ function makeMaker(map, path, map_icon_label, { lat, lng } = position, data, mar
     marker.addListener('rightclick', function () {
         locRef.child(data.key).remove()
     });
-
-$(function(){
-    $('img.svg').each(function(){
-        var $img = jQuery(this);
-        var imgID = $img.attr('id');
-        var imgClass = $img.attr('class');
-        var imgURL = $img.attr('src');
-    
-        $.get(imgURL, function(data) {
-            // Get the SVG tag, ignore the rest
-            var $svg = jQuery(data).find('svg');
-    
-            // Add replaced image's ID to the new SVG
-            if(typeof imgID !== 'undefined') {
-                $svg = $svg.attr('id', imgID);
-            }
-            // Add replaced image's classes to the new SVG
-            if(typeof imgClass !== 'undefined') {
-                $svg = $svg.attr('class', imgClass+' replaced-svg');
-            }
-    
-            // Remove any invalid XML tags as per http://validator.w3.org
-            $svg = $svg.removeAttr('xmlns:a');
-            
-            // Check if the viewport is set, else we gonna set it if we can.
-            if(!$svg.attr('viewBox') && $svg.attr('height') && $svg.attr('width')) {
-                $svg.attr('viewBox', '0 0 ' + $svg.attr('height') + ' ' + $svg.attr('width'))
-            }
-    
-            // Replace image with new SVG
-            $img.replaceWith($svg);
-    
-        }, 'xml');
-    
-    });
-});
 
     return marker
 }
