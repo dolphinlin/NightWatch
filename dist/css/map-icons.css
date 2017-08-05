@@ -36,10 +36,14 @@
 }
 
 .map-icon-label .map-icon.map-sos {
+	fill: white;
 	animation-name: sos;
 	animation-iteration-count: infinite;
 	animation-direction: alternate;
 	animation-duration: 0.1s;
+}
+svg path {
+	fill: #000 !important;
 }
 
 @keyframes sos {

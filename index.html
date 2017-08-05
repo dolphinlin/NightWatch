@@ -1,56 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NightWatch</title>
-    <style type="text/css">
-      #map {
-        height: 100%;
-      }
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-      .info {
-        display: flex;
-        align-items: center;
-      }
-      .info .info-name-phone {
-        padding: 0 10px;
-      }
-      .info .info-name-phone .info-name {
-        font-size: 18px;
-        font-weight: 400;
-      }
-      .info .info-name-phone .info-phone {
-        color: darkgray;
-      }
-      .info .info-photo {
-        background-repeat: no-repeat;
-        border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        background-size: 30px;
-      }
-      .info .info-phone-btn {
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-      }
-      .info .info-phone-btn:hover {
-        filter: opacity(90%);
-      }
-</style>
-<link rel="stylesheet" type="text/css" href="./dist/css/map-icons.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>NightWatch</title>
+  <style type="text/css">
+    #map {
+      height: 100%;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+    }
+
+    .info .info-name-phone {
+      padding: 0 10px;
+    }
+
+    .info .info-name-phone .info-name {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .info .info-name-phone .info-phone {
+      color: darkgray;
+    }
+
+    .info .info-photo {
+      background-repeat: no-repeat;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      background-size: 30px;
+    }
+
+    .info .info-phone-btn {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    .info .info-phone-btn:hover {
+      filter: opacity(90%);
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="./dist/css/map-icons.css">
 </head>
+
 <body>
-    <div id="map"></div>
-    <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqIKzgQx_yMB-fvxh4-_2YNRrXVDRUlyY&libraries=visualization"></script>
-<script src="./dist/js/map-icons.js"></script>
-<script src="./main.js"></script>
+  <div id="map"></div>
+  <div id="remote-media"></div>
+  <script src="https://www.gstatic.com/firebasejs/4.2.0/firebase.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDqIKzgQx_yMB-fvxh4-_2YNRrXVDRUlyY&libraries=visualization"></script>
+  <script src="./dist/js/map-icons.js"></script>
+   <script src="https://media.twiliocdn.com/sdk/js/video/v1/twilio-video.min.js"></script> 
+  <script
+  src="http://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+  <script src="./main.js"></script>
 </body>
+
 </html>

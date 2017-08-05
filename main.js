@@ -101,7 +101,7 @@ function testMap(map) {
     let markers = new Map()
     locRef.on('child_added', function (data) {
         if (!data.val().loc) return
-        let map_icon_label = `<span class="map-icon ${data.val().gender ? 'map-icon-male' : 'map-icon-female'} ${data.val().sos ? 'map-sos' : ''}"></span>`
+        let map_icon_label = `<image src="./${data.val().gender ? 'Boy' : 'Girl'}.svg" class="svg ${data.val().sos ? 'map-sos' : ''}"/>`
         let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
             lat: data.val().loc.lat,
             lng: data.val().loc.lng
@@ -113,7 +113,7 @@ function testMap(map) {
     locRef.on('child_changed', function (data) {
         let m = markers.get(data.key)
         m.setMap(null)
-        let map_icon_label = `<span class="map-icon ${data.val().gender ? 'map-icon-male' : 'map-icon-female'} ${data.val().sos ? 'map-sos' : ''}"></span>`
+        let map_icon_label = `<image src="./${data.val().gender ? 'Boy' : 'Girl'}.svg" class="svg ${data.val().sos ? 'map-sos' : ''}"/>`
         let marker = makeMaker(map, mapIcons.shapes.MAP_PIN, map_icon_label, {
             lat: data.val().loc.lat,
             lng: data.val().loc.lng
@@ -154,7 +154,7 @@ function makeMaker(map, path, map_icon_label, { lat, lng } = position, data, mar
               <div class="info-name">${data.val().name}</div>
                 <div class="info-phone">${data.val().phone}</div>
             </div>
-            <div class="info-phone-btn" onclick="alert('call phone')">
+            <div class="info-phone-btn" onclick="callSOS('${data.key}')">
                 <image src="./phone.svg" width="30" height="30"/>
             </div>
         </div>
@@ -179,6 +179,42 @@ function makeMaker(map, path, map_icon_label, { lat, lng } = position, data, mar
         locRef.child(data.key).remove()
     });
 
+$(function(){
+    $('img.svg').each(function(){
+        var $img = jQuery(this);
+        var imgID = $img.attr('id');
+        var imgClass = $img.attr('class');
+        var imgURL = $img.attr('src');
+    
+        $.get(imgURL, function(data) {
+            // Get the SVG tag, ignore the rest
+            var $svg = jQuery(data).find('svg');
+    
+            // Add replaced image's ID to the new SVG
+            if(typeof imgID !== 'undefined') {
+                $svg = $svg.attr('id', imgID);
+            }
+            // Add replaced image's classes to the new SVG
+            if(typeof imgClass !== 'undefined') {
+                $svg = $svg.attr('class', imgClass+' replaced-svg');
+            }
+    
+            // Remove any invalid XML tags as per http://validator.w3.org
+            $svg = $svg.removeAttr('xmlns:a');
+            
+            // Check if the viewport is set, else we gonna set it if we can.
+            if(!$svg.attr('viewBox') && $svg.attr('height') && $svg.attr('width')) {
+                $svg.attr('viewBox', '0 0 ' + $svg.attr('height') + ' ' + $svg.attr('width'))
+            }
+    
+            // Replace image with new SVG
+            $img.replaceWith($svg);
+    
+        }, 'xml');
+    
+    });
+});
+
     return marker
 }
 
@@ -201,8 +237,8 @@ function addToFirebase({ name, gender, photo, loc, phone, sos } = data) {
 function dangerPin(map, dangers, { lat, lng } = center) {
     var dangerCircle = new google.maps.Circle({
         strokeColor: '#FF0000',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
+        strokeOpacity: 0.35,
+        strokeWeight: 0,
         fillColor: '#FF0000',
         fillOpacity: 0.35,
         map,
@@ -240,5 +276,6 @@ function makeInfoBox(controlDiv, map) {
     controlText.innerText = 'NightWatch WEB Monit'
     controlUI.appendChild(controlText)
 }
+
 
 // google map key: AIzaSyDqIKzgQx_yMB-fvxh4-_2YNRrXVDRUlyY
